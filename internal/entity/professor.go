@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 type Professor struct {
 	gorm.Model
-	ID       uint   `gorm:"primaryKey;autoIncrement" json:"id"`
-	Name     string `json:"name"`
-	Email    string `json:"email"`
+	ID       uint `gorm:"primaryKey;autoIncrement"`
+	Name     string
+	Email    string
 	Password string
 }
