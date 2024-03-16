@@ -1,8 +1,11 @@
 package entity
 
+import "gorm.io/gorm"
+
 type Professor struct {
-	ID       uint `gorm:"primaryKey;autoIncrement"`
-	Name     string
-	Email    string
+	gorm.Model
+	ID       uint   `gorm:"primaryKey;autoIncrement" json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
 	Password string
 }
