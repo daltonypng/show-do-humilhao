@@ -38,7 +38,7 @@ func (g *Gorm) Read(destiny interface{}, conditionals ...interface{}) error {
 }
 
 func (g *Gorm) Update(destiny interface{}) error {
-	result := g.database.Updates(destiny)
+	result := g.database.Save(destiny)
 
 	return result.Error
 }

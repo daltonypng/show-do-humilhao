@@ -30,6 +30,10 @@ func (repository *Repository) FindByID(ID uint) (*entity.Classroom, error) {
 	return classroom, nil
 }
 
+func (repository *Repository) Update(classroom *entity.Classroom) error {
+	return repository.database.Update(&classroom)
+}
+
 func (repository *Repository) Delete(classroom *entity.Classroom) error {
 	return repository.database.Delete(classroom)
 }

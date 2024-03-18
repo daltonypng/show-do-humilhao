@@ -56,6 +56,29 @@ func (service *Service) FindByID(ID uint) (*entity.Classroom, error) {
 	return classroom, nil
 }
 
+func (service *Service) UpdateStatusByID(ID uint, status int) error {
+
+	if ID <= 0 {
+		return errors.New(apperror.ClassroomEmptyID)
+
+	} else if status < StatusCreating || status > StatusFinished {
+		return errors.New(apperror.ClassroomInvalidStatus)
+
+	}
+
+	classroom, err := service.repository.FindByID(ID)
+
+	if err != nil {
+		return nil
+
+	}
+
+	classroom.Status = status
+
+	return service.repository.Update(classroom)
+
+}
+
 func generateNewClassroomID() uint {
 
 	const (

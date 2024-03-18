@@ -43,3 +43,24 @@ func TestCreateRoom(t *testing.T) {
 	assert.Greater(t, classroom.ID, min)
 	assert.Less(t, classroom.ID, max)
 }
+
+func TestFindByID(t *testing.T) {
+
+	service := classroom.NewService(repository)
+
+	classroom, err := service.FindByID(100000)
+
+	assert.Nil(t, err)
+
+	assert.NotNil(t, classroom)
+}
+
+func TestUpdateStatusByID(t *testing.T) {
+
+	service := classroom.NewService(repository)
+
+	err := service.UpdateStatusByID(100000, 1)
+
+	assert.Nil(t, err)
+
+}
