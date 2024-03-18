@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	min uint = 100000
-	max uint = 999999
+	StatusCreating int = 0
+	StatusPlaying  int = 1
+	StatusFinished int = 2
 )
 
 type Service struct {
@@ -33,15 +34,35 @@ func (service *Service) Create(classroom *entity.Classroom) error {
 	}
 
 	classroom.ID = generateNewClassroomID()
+	classroom.Status = StatusCreating
 
 	return service.repository.Create(classroom)
 }
 
 func (service *Service) FindByID(ID uint) (*entity.Classroom, error) {
-	return nil, nil
+
+	if ID <= 0 {
+		return nil, errors.New(apperror.ClassroomEmptyID)
+
+	}
+
+	classroom, err := service.repository.FindByID(ID)
+
+	if err != nil {
+		return nil, err
+
+	}
+
+	return classroom, nil
 }
 
 func generateNewClassroomID() uint {
 
+	const (
+		min uint = 100000
+		max uint = 999999
+	)
+
 	return min + rand.UintN(max-min+1)
+
 }

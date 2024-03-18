@@ -36,17 +36,17 @@ func NewProfessorRouter() *ProfessorRouter {
 
 }
 
-type signInRequestBody struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 func (router *ProfessorRouter) postSignIn(context *gin.Context) {
 
-	requestBody := &signInRequestBody{}
+	type requestBody struct {
+		Name     string `json:"name"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
 
-	err := context.BindJSON(&requestBody)
+	request := &requestBody{}
+
+	err := context.BindJSON(&request)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, apperror.ProfessorBadRequest)
@@ -54,9 +54,9 @@ func (router *ProfessorRouter) postSignIn(context *gin.Context) {
 	}
 
 	professor := &entity.Professor{
-		Name:     requestBody.Name,
-		Email:    requestBody.Email,
-		Password: requestBody.Password,
+		Name:     request.Name,
+		Email:    request.Email,
+		Password: request.Password,
 	}
 
 	err = router.service.SignIn(professor)
