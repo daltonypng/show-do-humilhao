@@ -18,6 +18,7 @@ func main() {
 	professorRouter := NewProfessorRouter()
 
 	server.POST("/v1/sign-in", professorRouter.postSignIn)
+	server.POST("/v1/login", professorRouter.postLogin)
 
 	server.Run()
 }

@@ -51,6 +51,13 @@ func (service *Service) SignIn(professor *entity.Professor) error {
 
 	}
 
+	foundProfessor, _ := service.repository.FindByEmail(professor.Email)
+
+	if foundProfessor.ID > 0 {
+		return errors.New(apperror.ProfessorDuplicated)
+
+	}
+
 	return service.repository.Create(professor)
 
 }

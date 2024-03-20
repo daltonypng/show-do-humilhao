@@ -62,7 +62,7 @@ func (router *ProfessorRouter) postSignIn(context *gin.Context) {
 	err = router.service.SignIn(professor)
 
 	if err != nil {
-		context.JSON(professorAppErrorStatusCode(err), err)
+		context.String(professorAppErrorStatusCode(err), err.Error())
 		return
 	}
 
@@ -70,15 +70,46 @@ func (router *ProfessorRouter) postSignIn(context *gin.Context) {
 
 }
 
+func (router *ProfessorRouter) postLogin(context *gin.Context) {
+
+	type requestBody struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	request := &requestBody{}
+
+	err := context.BindJSON(&request)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, apperror.ProfessorBadRequest)
+		return
+	}
+
+	err = router.service.Login(request.Email, request.Password)
+
+	if err != nil {
+		context.String(professorAppErrorStatusCode(err), err.Error())
+		return
+	}
+
+	context.JSON(http.StatusOK, "PLACEHOLDER")
+
+}
+
 func professorAppErrorStatusCode(err error) int {
 
-	message := err.Error()
-
-	switch message {
+	switch err.Error() {
 	case apperror.ProfessorInvalidEmail:
 	case apperror.ProfessorEmptyName:
 	case apperror.ProfessorInvalidPassword:
 		return http.StatusBadRequest
+
+	case apperror.ProfessorDuplicated:
+		return http.StatusConflict
+
+	case apperror.ProfessorUnauthorized:
+		return http.StatusUnauthorized
 
 	}
 
