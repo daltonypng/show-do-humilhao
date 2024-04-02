@@ -51,6 +51,9 @@ func (service *Service) FindByID(ID uint) (*entity.Classroom, error) {
 	if err != nil {
 		return nil, err
 
+	} else if classroom.ID <= 0 {
+		return nil, errors.New(apperror.ClassroomNotFound)
+
 	}
 
 	return classroom, nil
@@ -69,13 +72,28 @@ func (service *Service) UpdateStatusByID(ID uint, status int) error {
 	classroom, err := service.repository.FindByID(ID)
 
 	if err != nil {
-		return nil
-
+		return err
 	}
 
 	classroom.Status = status
 
 	return service.repository.Update(classroom)
+
+}
+
+func (service *Service) RemoveByID(ID uint) error {
+
+	if ID <= 0 {
+		return errors.New(apperror.ClassroomEmptyID)
+	}
+
+	classroom, err := service.repository.FindByID(ID)
+
+	if err != nil {
+		return err
+	}
+
+	return service.repository.Delete(classroom)
 
 }
 

@@ -16,9 +16,15 @@ func main() {
 
 	server := gin.Default()
 	professorRouter := NewProfessorRouter()
+	classroomRouter := NewClassroomRouter()
 
 	server.POST("/v1/sign-in", professorRouter.postSignIn)
 	server.POST("/v1/login", professorRouter.postLogin)
+
+	server.POST("/v1/classroom", classroomRouter.postCreateRoom)
+	server.GET("/v1/classroom/:id", classroomRouter.getClassroom)
+	server.PUT("/v1/classroom/:id", classroomRouter.putClassroomUpdateStatus)
+	server.DELETE("/v1/classroom/:id", classroomRouter.deleteClassroomByID)
 
 	server.Run()
 }

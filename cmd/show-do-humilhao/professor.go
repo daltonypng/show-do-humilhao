@@ -62,11 +62,12 @@ func (router *ProfessorRouter) postSignIn(context *gin.Context) {
 	err = router.service.SignIn(professor)
 
 	if err != nil {
-		context.String(professorAppErrorStatusCode(err), err.Error())
+		status, message := getErrorStatusResponse(err)
+		context.String(status, message)
 		return
 	}
 
-	context.JSON(http.StatusCreated, "Professor cadastrado com sucesso.")
+	context.String(http.StatusCreated, "Professor cadastrado com sucesso.")
 
 }
 
@@ -89,29 +90,11 @@ func (router *ProfessorRouter) postLogin(context *gin.Context) {
 	err = router.service.Login(request.Email, request.Password)
 
 	if err != nil {
-		context.String(professorAppErrorStatusCode(err), err.Error())
+		status, message := getErrorStatusResponse(err)
+		context.String(status, message)
 		return
 	}
 
-	context.JSON(http.StatusOK, "PLACEHOLDER")
+	context.String(http.StatusOK, "PLACEHOLDER")
 
-}
-
-func professorAppErrorStatusCode(err error) int {
-
-	switch err.Error() {
-	case apperror.ProfessorInvalidEmail:
-	case apperror.ProfessorEmptyName:
-	case apperror.ProfessorInvalidPassword:
-		return http.StatusBadRequest
-
-	case apperror.ProfessorDuplicated:
-		return http.StatusConflict
-
-	case apperror.ProfessorUnauthorized:
-		return http.StatusUnauthorized
-
-	}
-
-	return http.StatusInternalServerError
 }

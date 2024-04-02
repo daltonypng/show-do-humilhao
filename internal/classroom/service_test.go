@@ -44,6 +44,26 @@ func TestCreateRoom(t *testing.T) {
 	assert.Less(t, classroom.ID, max)
 }
 
+func TestRemoveRoomByID(t *testing.T) {
+
+	service := classroom.NewService(repository)
+
+	classroom := &entity.Classroom{
+		Name:        "Test Classroom",
+		ProfessorID: 1,
+	}
+
+	err := service.Create(classroom)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, classroom)
+
+	err = service.RemoveByID(classroom.ID)
+
+	assert.Nil(t, err)
+
+}
+
 func TestFindByID(t *testing.T) {
 
 	service := classroom.NewService(repository)
@@ -62,5 +82,10 @@ func TestUpdateStatusByID(t *testing.T) {
 	err := service.UpdateStatusByID(100000, 1)
 
 	assert.Nil(t, err)
+
+	err = service.UpdateStatusByID(100000, 999)
+
+	assert.NotNil(t, err)
+	assert.EqualError(t, err, apperror.ClassroomInvalidStatus)
 
 }
